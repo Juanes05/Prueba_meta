@@ -15,18 +15,13 @@ class BookController extends Controller
     public function index()
     {
         //
+        $books=Book::with('author')->get();
+       
+
+          return response()->json($books);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+  
     /**
      * Store a newly created resource in storage.
      *
@@ -34,8 +29,39 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+
+    {       
+
+
+        
+        $book=new Book();
+        $book->publish_date=$request->publish_date;
+        $book->title = $request->title;
+        $book->author_id = $request->author_id;
+        $validator = Book::validate(array(
+            'author_id' =>$request->author_id,
+            'title' => $request->title,
+            'publish_date' =>$request->publish_date,
+            
+         ));
+
+         if($validator->fails())
+         {
+              
+            return response()->json(null);
+
+         }
+
+         else{
+
+            $book->save();
+
+            return response()->json($book);  
+
+         }
+
+
+       
     }
 
     /**
@@ -44,21 +70,14 @@ class BookController extends Controller
      * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function show(Book $book)
+    public function show($id)
     {
         //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Book $book)
-    {
-        //
+        $book= Book::with('author')->find($id);
+       return response()->json($book);
     }
+   
 
     /**
      * Update the specified resource in storage.
@@ -67,9 +86,38 @@ class BookController extends Controller
      * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
+    public function update($id,Request $request)
     {
         //
+
+
+        $book=Book::findOrFail($id);
+
+        $book->publish_date=$request->publish_date;
+        $book->title = $request->title;
+        $book->author_id = $request->author_id;
+        $validator = Book::validate(array(
+            'author_id' =>$request->author_id,
+            'title' => $request->title,
+            'publish_date' =>$request->publish_date,
+            
+         ));
+
+         if($validator->fails())
+         {
+              
+            return $validator->messages()->all();
+
+         }
+
+         else{
+
+            $book->save();
+
+            return response()->json($book);  
+
+         }
+
     }
 
     /**
@@ -78,8 +126,16 @@ class BookController extends Controller
      * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Book $book)
+    public function destroy($id)
     {
         //
+
+        $book=Book::findOrFail($id);
+        if($book)
+        {
+            $book->delete();
+            return response()->json(null);
+
+        }
     }
 }

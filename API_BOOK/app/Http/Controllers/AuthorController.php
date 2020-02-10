@@ -70,10 +70,11 @@ class AuthorController extends Controller
      * @param  \App\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update($id,Request $request)
     {
         //
-        $author = Author::findOrFail($request->id);
+        $author = Author::findOrFail($id);
+        
 
         $author->name = $request->name;
 

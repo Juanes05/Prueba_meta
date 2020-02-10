@@ -21,3 +21,4 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::apiResource('Authors', 'AuthorController');
+Route::apiResource('Books', 'BookController');
