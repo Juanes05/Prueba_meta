@@ -31,14 +31,35 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //        
+
+       
 
         $author=new Author();
         $author->name=$request->name;
+        $validator = Author::validate(array(
+            'name' =>$request->name,           
+            
+         ));
+         
+         if($validator->fails())
+         {
+              
+            return $validator->messages()->all();
 
-        $author->save();
+         }
 
-        return response()->json($author);
+         else{
+
+            $author->save();
+
+            return response()->json($author);  
+
+         }
+
+       
+
+        
     }
 
     /**
@@ -73,12 +94,30 @@ class AuthorController extends Controller
     public function update($id,Request $request)
     {
         //
-        $author = Author::findOrFail($id);
+        $author = Author::findOrFail($id);     
         
-
         $author->name = $request->name;
+        $validator = Author::validate(array(
+            'name' =>$request->name,          
+            
+         ));
 
-        $author->save();
+         if($validator->fails())
+         {
+              
+            return $validator->messages()->all();
+
+         }
+
+         else{
+
+            $author->save();
+
+            return response()->json($author);  
+
+         }
+
+        
 
     }
 
