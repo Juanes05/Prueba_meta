@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthorController extends Controller
 {
@@ -15,6 +16,9 @@ class AuthorController extends Controller
     public function index()
     {
         //
+
+        $author=Author::all();
+          return $author;
     }
 
  
@@ -28,6 +32,13 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
         //
+
+        $author=new Author();
+        $author->name=$request->name;
+
+        $author->save();
+
+        return response()->json($author);
     }
 
     /**
@@ -36,9 +47,13 @@ class AuthorController extends Controller
      * @param  \App\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function show(Author $author)
+    public function show($id)
     {
         //
+       
+       $author= Author::find($id);
+
+       return response()->json($author);
     }
 
     /**
@@ -55,9 +70,15 @@ class AuthorController extends Controller
      * @param  \App\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Author $author)
+    public function update(Request $request)
     {
         //
+        $author = Author::findOrFail($request->id);
+
+        $author->name = $request->name;
+
+        $author->save();
+
     }
 
     /**
@@ -66,8 +87,14 @@ class AuthorController extends Controller
      * @param  \App\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Author $author)
+    public function destroy($id)
     {
-        //
+        $author=Author::findOrFail($id);
+        if($author)
+        {
+            $author->delete();
+            return response()->json(null);
+
+        }
     }
 }
