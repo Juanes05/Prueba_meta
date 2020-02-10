@@ -18,7 +18,7 @@ class AuthorController extends Controller
         //
 
         $author=Author::all();
-          return $author;
+          return response()->json($author);
     }
 
  
